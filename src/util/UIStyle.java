@@ -1,4 +1,3 @@
-// util/UIStyle.java
 package util;
 
 import javax.swing.*;

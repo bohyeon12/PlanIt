@@ -90,7 +90,6 @@ public class TodoFormDialog extends JDialog {
         titleLabel.setForeground(UIStyle.getTextPrimary());
         card.add(titleLabel, BorderLayout.NORTH);
 
-        // 폼 영역
         JPanel form = new JPanel(new GridBagLayout());
         form.setOpaque(false);
         card.add(form, BorderLayout.CENTER);

@@ -105,7 +105,6 @@ public class ConfirmDialog extends JDialog {
         return confirmed;
     }
 
-    // 🔹 static 헬퍼: 어디서든 쉽게 호출
     public static boolean showDeleteConfirm(Component parent, String message) {
         Window w = SwingUtilities.getWindowAncestor(parent);
         Frame owner = (w instanceof Frame) ? (Frame) w : null;

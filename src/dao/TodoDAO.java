@@ -134,7 +134,6 @@ public class TodoDAO {
             params.add(filter.getPriority());
         }
 
-        // 🔽 중요도 → 날짜 → id 순
         sb.append(" ORDER BY priority, date, id");
 
         List<Todo> result = new ArrayList<>();

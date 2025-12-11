@@ -4,12 +4,12 @@ import java.time.LocalDate;
 
 public class Todo {
 
-    private int id;                 // PK
-    private String title;           // 제목
-    private String description;     // 내용
-    private LocalDate date;         // 날짜
-    private int priority;           // 1(상) ~ 3(하) 같은 식
-    private boolean completed;      // 완료 여부
+    private int id;
+    private String title;
+    private String description;
+    private LocalDate date;
+    private int priority;      
+    private boolean completed;
 
     public int getId() {
         return id;

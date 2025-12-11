@@ -1,4 +1,3 @@
-// view/CalendarViewPanel.java
 package view;
 
 import controller.MainController;
@@ -37,11 +36,9 @@ public class CalendarViewPanel extends JPanel {
         int totalPadding = OUTER_MARGIN + INNER_PADDING;
         setBorder(BorderFactory.createEmptyBorder(totalPadding, totalPadding, totalPadding, totalPadding));
 
-        // 상단: 년/월 + 이전/다음
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         titlePanel.setOpaque(false);
 
-     // 버튼을 필드로 생성
         prevBtn = new JButton("<");
         nextBtn = new JButton(">");
 
@@ -57,7 +54,6 @@ public class CalendarViewPanel extends JPanel {
             renderCalendar();
         });
 
-        // 제목/단위 라벨을 필드로 생성
         yearTitle = new JLabel(String.valueOf(currentMonth.getYear()));
         yearTitle.setFont(new Font("맑은 고딕", Font.BOLD, 22));
 
@@ -76,12 +72,9 @@ public class CalendarViewPanel extends JPanel {
 
         add(titlePanel, BorderLayout.NORTH);
 
-        // 중앙: 요일 + 날짜
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setOpaque(false);
 
-        // 요일 헤더
-     // 요일 헤더
         JPanel headerPanel = new JPanel(new GridLayout(1, 7));
         headerPanel.setOpaque(false);
 
@@ -122,35 +115,29 @@ public class CalendarViewPanel extends JPanel {
 
     private void renderCalendar() {
 	    dayPanel.removeAll();
-	    
-	    
 
-	    // 년/월 숫자 바꾸기
 	    yearTitle.setText(String.valueOf(currentMonth.getYear()));
 	    monthTitle.setText(String.valueOf(currentMonth.getMonthValue()));
 
-	    // ✅ 여기서 다크/라이트 모드에 맞게 다시 색 칠하기
 	    Color primary = UIStyle.getTextPrimary();
 
 	    yearTitle.setForeground(primary);
 	    monthTitle.setForeground(primary);
-	    yearSuffixLabel.setForeground(primary);   // "년"
-	    monthSuffixLabel.setForeground(primary);  // "월"
+	    yearSuffixLabel.setForeground(primary);
+	    monthSuffixLabel.setForeground(primary);
 
-	    // 월 이동 버튼 색도 다시 적용
 	    styleNavButton(prevBtn);
 	    styleNavButton(nextBtn);
-	    
-	    //요일 라벨들
+
 	    for (int i = 0; i < weekdayLabels.length; i++) {
 	        JLabel label = weekdayLabels[i];
 	        if (label == null) continue;
 
-	        if (i == 0) {              // 일
+	        if (i == 0) {
 	            label.setForeground(UIStyle.getSundayColor());
-	        } else if (i == 6) {       // 토
+	        } else if (i == 6) {
 	            label.setForeground(UIStyle.getSaturdayColor());
-	        } else {                   // 월~금
+	        } else {
 	            label.setForeground(primary);
 	        }
 	    }
@@ -159,7 +146,6 @@ public class CalendarViewPanel extends JPanel {
 	    int daysInMonth = DateUtils.getDaysInMonth(currentMonth);
 	    LocalDate today = DateUtils.getToday();
 
-        // 앞 공백
         for (int i = 0; i < offset; i++) {
             dayPanel.add(new JLabel(""));
         }
@@ -197,10 +183,8 @@ public class CalendarViewPanel extends JPanel {
             setOpaque(false);
             setFont(getFont().deriveFont(Font.PLAIN, 13f));
 
-            // 기본 글씨 색
             setForeground(UIStyle.getTextPrimary());
 
-            // 요일에 따라 색 (일/토)
             switch (date.getDayOfWeek()) {
                 case SUNDAY -> setForeground(UIStyle.getSundayColor());
                 case SATURDAY -> setForeground(UIStyle.getSaturdayColor());
@@ -211,7 +195,6 @@ public class CalendarViewPanel extends JPanel {
                 setFont(getFont().deriveFont(Font.BOLD));
             }
 
-            // 일정 있는 날은 살짝 더 굵게
             if (highestPriority != null) {
                 setFont(getFont().deriveFont(Font.BOLD));
             }
@@ -252,7 +235,6 @@ public class CalendarViewPanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        // 카드 배경 (다크/라이트)
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -264,7 +246,6 @@ public class CalendarViewPanel extends JPanel {
         g2.setColor(UIStyle.getBackground());
         g2.fillRect(0, 0, getWidth(), getHeight());
 
-        // 본체 카드
         g2.setColor(UIStyle.getCardBackground());
         g2.fillRoundRect(rectX, rectY, rectWidth, rectHeight, ARC_SIZE, ARC_SIZE);
 

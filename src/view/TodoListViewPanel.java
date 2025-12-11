@@ -1,4 +1,3 @@
-// view/TodoListViewPanel.java
 package view;
 
 import controller.MainController;
@@ -41,12 +40,10 @@ public class TodoListViewPanel extends JPanel {
         int totalPadding = OUTER_MARGIN + INNER_PADDING;
         setBorder(BorderFactory.createEmptyBorder(totalPadding, totalPadding, totalPadding, totalPadding));
 
-        // 제목
         titleLabel = new JLabel("Todo List");
         titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 18));
         add(titleLabel, BorderLayout.NORTH);
 
-        // 리스트 컨테이너
         listContainer = new JPanel();
         listContainer.setLayout(new BoxLayout(listContainer, BoxLayout.Y_AXIS));
 
@@ -59,7 +56,6 @@ public class TodoListViewPanel extends JPanel {
 
         add(scrollWrapper, BorderLayout.CENTER);
 
-        // 추가 버튼
         addButton = new JButton("+ 새 할 일 목록 추가하기");
         addButton.setFont(new Font("맑은 고딕", Font.BOLD, 13));
         addButton.setContentAreaFilled(false);
@@ -74,12 +70,10 @@ public class TodoListViewPanel extends JPanel {
 
         add(btnPanel, BorderLayout.SOUTH);
 
-        // ★ 테마 색 한 번 적용
         applyTheme();
     }
 
     public void applyTheme() {
-        // 카드 영역 전체는 paintComponent에서 그림 → 여기선 내부 컴포넌트만
         titleLabel.setForeground(UIStyle.getTextPrimary());
 
         Color cardBg = UIStyle.getCardBackground();
@@ -92,8 +86,6 @@ public class TodoListViewPanel extends JPanel {
         btnPanel.setBackground(cardBg);
         addButton.setForeground(UIStyle.getTextSecondary());
 
-        // 리스트 아이템들의 텍스트 색도 다시 맞춰주려면 재렌더링
-        // (currentTodos를 기준으로 다시 뿌리기)
         setTodoList(currentTodos, currentDateForNew != null);
     }
 
@@ -108,13 +100,11 @@ public class TodoListViewPanel extends JPanel {
         new TodoFormDialog(frame, controller, null, baseDate);
     }
 
-    // 날짜별 보기
     public void showTodosForDate(LocalDate date, List<Todo> todos) {
         this.currentDateForNew = date;
         setTodoList(todos, true);
     }
 
-    // 검색/필터 보기
     public void showTodos(List<Todo> todos) {
         this.currentDateForNew = null;
         setTodoList(todos, false);
@@ -140,7 +130,6 @@ public class TodoListViewPanel extends JPanel {
         itemPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
         itemPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 6, 0));
 
-        // 왼쪽 동그라미
         JPanel circle = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -161,7 +150,6 @@ public class TodoListViewPanel extends JPanel {
         circle.setPreferredSize(new Dimension(30, 40));
         circle.setBackground(UIStyle.getCardBackground());
 
-        // 텍스트
         StringBuilder sb = new StringBuilder();
         if (showDate && todo.getDate() != null) {
             sb.append("[").append(DateUtils.dateToUiString(todo.getDate())).append("] ");
@@ -181,7 +169,6 @@ public class TodoListViewPanel extends JPanel {
             textLabel.setForeground(UIStyle.getTextPrimary());
         }
 
-        // 동그라미 클릭 → 완료 토글
         circle.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -199,7 +186,6 @@ public class TodoListViewPanel extends JPanel {
             }
         });
 
-        // 더블클릭 → 수정
         MouseAdapter editListener = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

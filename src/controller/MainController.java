@@ -16,8 +16,8 @@ public class MainController {
     private CalendarViewPanel calendarView;
     private TodoListViewPanel listView;
 
-    private LocalDate currentDate;      // 마지막으로 선택한 날짜
-    private FilterOptions lastFilter;   // 마지막 검색/필터
+    private LocalDate currentDate;
+    private FilterOptions lastFilter; 
 
     public MainController(TodoDAO todoDAO) {
         this.todoDAO = todoDAO;
@@ -69,13 +69,11 @@ public class MainController {
 	    } else {
 	        todoDAO.update(todo);
 	    }
-	
-	    // 캘린더에도 반영
+
 	    if (calendarView != null) {
 	        calendarView.refresh();
 	    }
-	
-	    // 리스트 갱신
+
 	    if (todo.getDate() != null) {
 	        onDateSelected(todo.getDate());
 	    } else if (lastFilter != null) {
@@ -88,18 +86,15 @@ public class MainController {
 
 	    todoDAO.delete(todo.getId());
 
-	    // 달력 갱신
 	    if (calendarView != null) {
 	        calendarView.refresh();
 	    }
 
-	    // 현재 뷰 갱신 (필터가 있으면 필터 유지, 없으면 날짜 기준)
 	    if (lastFilter != null) {
 	        applyFilter(lastFilter);
 	    } else if (todo.getDate() != null) {
 	        onDateSelected(todo.getDate());
 	    } else {
-	        // 예비: 전체 조회
 	        FilterOptions f = new FilterOptions();
 	        listView.showTodos(todoDAO.findByFilter(f));
 	    }
@@ -109,7 +104,6 @@ public class MainController {
         if (todo == null || todo.getId() == 0) return;
         todo.setCompleted(completed);
         todoDAO.update(todo);
-        // 화면은 이미 체크박스를 바꿨으니 굳이 다시 로딩 안 해도 됨
     }
 
     public LocalDate getCurrentDate() {
@@ -118,11 +112,9 @@ public class MainController {
     
 
     public void onThemeChanged() {
-        // 달력 다시 그리기 (년도/월 텍스트, 버튼 등 색상 재적용)
         if (calendarView != null) {
             calendarView.refresh();
         }
-        // 리스트뷰도 다크/라이트 색 다시 입히기
         if (listView != null) {
             listView.applyTheme();
         }

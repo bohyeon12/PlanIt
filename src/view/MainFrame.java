@@ -33,7 +33,6 @@ public class MainFrame extends JFrame {
         splitPane.setBorder(null);
         splitPane.setOpaque(false);
 
-        // ⭐ 다크모드 대응 커스텀 UI
         splitPane.setUI(new BasicSplitPaneUI() {
             @Override
             public BasicSplitPaneDivider createDefaultDivider() {
@@ -43,11 +42,9 @@ public class MainFrame extends JFrame {
                         Graphics2D g2 = (Graphics2D) g.create();
                         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                        // 전체 바 배경
                         g2.setColor(UIStyle.getBackground());
                         g2.fillRect(0, 0, getWidth(), getHeight());
 
-                        // 가운데 라인
                         g2.setColor(UIStyle.getCardBorder());
                         int w = getWidth();
                         g2.fillRect(w / 2 - 1, 0, 2, getHeight());

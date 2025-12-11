@@ -4,9 +4,9 @@ import java.time.LocalDate;
 
 public class FilterOptions {
 
-    private String keyword;         // 제목 검색어
-    private LocalDate startDate;    // 시작 날짜 (옵션)
-    private LocalDate endDate;      // 끝 날짜 (옵션)
+    private String keyword;
+    private LocalDate startDate;
+    private LocalDate endDate;   
     private Boolean completed;    
 
     private Integer priority;      
