@@ -55,6 +55,12 @@ public class UIStyle {
                 ? new Color(130, 170, 255)
                 : new Color(90, 132, 255);
     }
+    
+    public static Color getTodayColor() {
+        return darkMode
+                ? new Color(186, 247, 0)
+                : new Color(1, 247, 2);
+    }
 
     public static Color getSundayColor() {
         return darkMode
@@ -67,7 +73,25 @@ public class UIStyle {
                 ? new Color(160, 185, 255)
                 : new Color(80, 120, 220);
     }
-    
+
+    public static Color getPriorityHighColor() {
+        return darkMode
+                ? new Color(255, 120, 120)
+                : new Color(220, 50, 60);
+    }
+
+    public static Color getPriorityMediumColor() {
+        return darkMode
+                ? new Color(130, 170, 255)
+                : new Color(70, 120, 220);
+    }
+
+    public static Color getPriorityLowColor() {
+        return darkMode
+                ? new Color(255, 215, 90)
+                : new Color(220, 180, 40);
+    }
+
     public static Color getFieldBackground() {
         return darkMode ? new Color(40, 44, 52) : Color.WHITE;
     }

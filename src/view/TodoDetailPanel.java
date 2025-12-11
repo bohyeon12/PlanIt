@@ -1,4 +1,3 @@
-// view/TodoDetailPanel.java
 package view;
 
 import controller.MainController;
@@ -30,7 +29,6 @@ public class TodoDetailPanel extends JPanel {
         this.controller = controller;
         setLayout(new BorderLayout());
 
-        // 상단: 제목 + 이 날짜에 새 일정 추가 버튼
         JPanel top = new JPanel(new BorderLayout());
         JLabel title = new JLabel("선택된 날짜의 일정");
         JButton addBtn = new JButton("이 날짜에 일정 추가");
@@ -39,24 +37,21 @@ public class TodoDetailPanel extends JPanel {
         top.add(addBtn, BorderLayout.EAST);
         add(top, BorderLayout.NORTH);
 
-        // 테이블: [완료체크][날짜][제목][우선순위]
         String[] cols = {"완료", "날짜", "제목", "우선순위"};
         tableModel = new DefaultTableModel(cols, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                // 완료 체크박스만 수정 가능
                 return column == 0;
             }
 
             @Override
             public Class<?> getColumnClass(int columnIndex) {
-                if (columnIndex == 0) return Boolean.class; // 체크박스
+                if (columnIndex == 0) return Boolean.class;
                 return Object.class;
             }
         };
         table = new JTable(tableModel);
 
-        // 완료 체크박스가 바뀔 때 컨트롤러에 반영
         tableModel.addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent e) {
@@ -71,7 +66,6 @@ public class TodoDetailPanel extends JPanel {
             }
         });
 
-        // 행 더블클릭 -> 수정 폼 열기
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

@@ -120,7 +120,6 @@ public class CalendarViewPanel extends JPanel {
         btn.setForeground(UIStyle.getTextPrimary());
     }
 
-
     private void renderCalendar() {
 	    dayPanel.removeAll();
 	    
@@ -167,10 +166,10 @@ public class CalendarViewPanel extends JPanel {
 
         for (int day = 1; day <= daysInMonth; day++) {
             LocalDate date = currentMonth.withDayOfMonth(day);
-            boolean hasTodo = controller.hasTodoOn(date);
+            Integer highestPriority = controller.getHighestPriorityForDate(date);
             boolean isToday = DateUtils.isSameDate(date, today);
 
-            DayButton btn = new DayButton(String.valueOf(day), date, hasTodo, isToday);
+            DayButton btn = new DayButton(String.valueOf(day), date, highestPriority, isToday);
 
             btn.addActionListener(e -> controller.onDateSelected(date));
 
@@ -181,16 +180,15 @@ public class CalendarViewPanel extends JPanel {
         dayPanel.repaint();
     }
 
-    // 일정 있는 날을 동그라미로 그려주는 버튼
     private static class DayButton extends JButton {
         private final LocalDate date;
-        private final boolean hasTodo;
+        private final Integer highestPriority;
         private final boolean isToday;
 
-        public DayButton(String text, LocalDate date, boolean hasTodo, boolean isToday) {
+        public DayButton(String text, LocalDate date, Integer highestPriority, boolean isToday) {
             super(text);
             this.date = date;
-            this.hasTodo = hasTodo;
+            this.highestPriority = highestPriority;
             this.isToday = isToday;
 
             setFocusPainted(false);
@@ -202,20 +200,19 @@ public class CalendarViewPanel extends JPanel {
             // 기본 글씨 색
             setForeground(UIStyle.getTextPrimary());
 
-            // 오늘이면 강조 색
-            if (isToday) {
-                setForeground(UIStyle.getAccent());
-                setFont(getFont().deriveFont(Font.BOLD));
-            }
-
             // 요일에 따라 색 (일/토)
             switch (date.getDayOfWeek()) {
                 case SUNDAY -> setForeground(UIStyle.getSundayColor());
                 case SATURDAY -> setForeground(UIStyle.getSaturdayColor());
             }
+            
+            if (isToday) {
+                setForeground(UIStyle.getTodayColor());
+                setFont(getFont().deriveFont(Font.BOLD));
+            }
 
             // 일정 있는 날은 살짝 더 굵게
-            if (hasTodo) {
+            if (highestPriority != null) {
                 setFont(getFont().deriveFont(Font.BOLD));
             }
         }
@@ -224,15 +221,24 @@ public class CalendarViewPanel extends JPanel {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
 
-            if (hasTodo) {
+            if (highestPriority != null) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                int d = 8; // 동그라미 지름
+                int d = 8;
                 int x = (getWidth() - d) / 2;
                 int y = getHeight() - d - 4;
 
-                g2.setColor(UIStyle.getAccent());
+                Color priorityColor;
+                if (highestPriority == 1) {
+                    priorityColor = UIStyle.getPriorityHighColor();
+                } else if (highestPriority == 2) {
+                    priorityColor = UIStyle.getPriorityMediumColor();
+                } else {
+                    priorityColor = UIStyle.getPriorityLowColor();
+                }
+
+                g2.setColor(priorityColor);
                 g2.fillOval(x, y, d, d);
 
                 g2.setColor(UIStyle.getBackground());

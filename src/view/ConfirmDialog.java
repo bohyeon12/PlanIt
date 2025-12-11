@@ -54,13 +54,11 @@ public class ConfirmDialog extends JDialog {
 
         add(card, gbc);
 
-        // 메시지 영역
         JLabel msgLabel = new JLabel(message);
         msgLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
         msgLabel.setForeground(UIStyle.getTextPrimary());
         card.add(msgLabel, BorderLayout.CENTER);
 
-        // 버튼 영역
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         bottom.setOpaque(false);
 

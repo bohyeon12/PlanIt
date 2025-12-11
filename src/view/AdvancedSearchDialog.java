@@ -1,4 +1,3 @@
-// view/AdvancedSearchDialog.java
 package view;
 
 import controller.MainController;
@@ -14,26 +13,30 @@ public class AdvancedSearchDialog extends JDialog {
 
     private final JTextField keywordField;
 
-    // 시작 날짜 콤보박스
     private final JComboBox<Integer> startYearBox;
     private final JComboBox<Integer> startMonthBox;
     private final JComboBox<Integer> startDayBox;
 
-    // 끝 날짜 콤보박스
     private final JComboBox<Integer> endYearBox;
     private final JComboBox<Integer> endMonthBox;
     private final JComboBox<Integer> endDayBox;
 
-    private final JComboBox<String> priorityBox;
-    private final JComboBox<String> statusBox;  
-    
+    private final JRadioButton priorityAll;
+    private final JRadioButton priorityHigh;
+    private final JRadioButton priorityMedium;
+    private final JRadioButton priorityLow;
+
+    private final JRadioButton statusAll;
+    private final JRadioButton statusCompleted;
+    private final JRadioButton statusNotCompleted;
+
     private final MainController controller;
 
     public AdvancedSearchDialog(Frame owner, MainController controller) {
         super(owner, "고급검색", true);
         this.controller = controller;
 
-        setSize(420, 320);
+        setSize(550, 350);
         setLocationRelativeTo(owner);
         setLayout(new BorderLayout());
         getContentPane().setBackground(UIStyle.getBackground());
@@ -86,10 +89,8 @@ public class AdvancedSearchDialog extends JDialog {
         UIStyle.styleTextField(keywordField);
         form.add(keywordField, c);
 
-        // 오늘 날짜 기준
         LocalDate today = DateUtils.getToday();
 
-        // 2) 시작 날짜 (연/월/일 콤보)
         row++;
         c.gridx = 0; c.gridy = row;
         form.add(makeLabel("시작 날짜"), c);
@@ -101,7 +102,6 @@ public class AdvancedSearchDialog extends JDialog {
         startMonthBox = createMonthBox(today.getMonthValue());
         startDayBox = createDayBox(today.getYear(), today.getMonthValue(), today.getDayOfMonth());
 
-        // 연/월 변경 시 일 콤보 갱신
         startYearBox.addActionListener(e -> updateDayBox(startYearBox, startMonthBox, startDayBox));
         startMonthBox.addActionListener(e -> updateDayBox(startYearBox, startMonthBox, startDayBox));
         
@@ -125,7 +125,6 @@ public class AdvancedSearchDialog extends JDialog {
         c.gridx = 1; c.gridy = row;
         form.add(startDatePanel, c);
 
-        // 3) 끝 날짜 (연/월/일 콤보)
         row++;
         c.gridx = 0; c.gridy = row;
         form.add(makeLabel("끝 날짜"), c);
@@ -160,27 +159,67 @@ public class AdvancedSearchDialog extends JDialog {
         c.gridx = 1; c.gridy = row;
         form.add(endDatePanel, c);
 
-        // 4) 중요도
         row++;
         c.gridx = 0; c.gridy = row;
         form.add(makeLabel("중요도"), c);
 
-        priorityBox = new JComboBox<>(new String[]{"전체", "상", "중", "하"});
-        c.gridx = 1; c.gridy = row;
-        UIStyle.styleComboBox(priorityBox);
-        form.add(priorityBox, c);
+        JPanel priorityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+        priorityPanel.setOpaque(false);
 
-        // 5) 상태 (완료/미완료)
+        priorityAll = new JRadioButton();
+        priorityHigh = new JRadioButton();
+        priorityMedium = new JRadioButton();
+        priorityLow = new JRadioButton();
+
+        ButtonGroup priorityGroup = new ButtonGroup();
+        priorityGroup.add(priorityAll);
+        priorityGroup.add(priorityHigh);
+        priorityGroup.add(priorityMedium);
+        priorityGroup.add(priorityLow);
+
+        priorityAll.setOpaque(false);
+        priorityHigh.setOpaque(false);
+        priorityMedium.setOpaque(false);
+        priorityLow.setOpaque(false);
+        priorityAll.setSelected(true);
+
+        priorityPanel.add(createSimpleOption(priorityAll, "전체"));
+        priorityPanel.add(createPriorityOption(priorityHigh, "상", UIStyle.getPriorityHighColor()));
+        priorityPanel.add(createPriorityOption(priorityMedium, "중", UIStyle.getPriorityMediumColor()));
+        priorityPanel.add(createPriorityOption(priorityLow, "하", UIStyle.getPriorityLowColor()));
+
+        c.gridx = 1; c.gridy = row;
+        form.add(priorityPanel, c);
+
         row++;
         c.gridx = 0; c.gridy = row;
         form.add(makeLabel("상태"), c);
 
-        statusBox = new JComboBox<>(new String[]{"전체", "완료만", "미완료만"});
-        c.gridx = 1; c.gridy = row;
-        UIStyle.styleComboBox(statusBox);
-        form.add(statusBox, c);
+        JPanel statusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+        statusPanel.setOpaque(false);
 
-        // ===== 버튼 영역 (카드 안 SOUTH에 배치) =====
+        statusAll = new JRadioButton();
+        statusCompleted = new JRadioButton();
+        statusNotCompleted = new JRadioButton();
+
+        ButtonGroup statusGroup = new ButtonGroup();
+        statusGroup.add(statusAll);
+        statusGroup.add(statusCompleted);
+        statusGroup.add(statusNotCompleted);
+
+        statusAll.setOpaque(false);
+        statusCompleted.setOpaque(false);
+        statusNotCompleted.setOpaque(false);
+
+        statusAll.setSelected(true);
+
+        statusPanel.add(createSimpleOption(statusAll, "전체"));
+        statusPanel.add(createSimpleOption(statusCompleted, "완료"));
+        statusPanel.add(createSimpleOption(statusNotCompleted, "미완료"));
+
+        c.gridx = 1; c.gridy = row;
+        form.add(statusPanel, c);
+
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         bottom.setOpaque(false);
         JButton cancelBtn = new JButton("취소");
@@ -195,7 +234,7 @@ public class AdvancedSearchDialog extends JDialog {
         bottom.add(cancelBtn);
         bottom.add(searchBtn);
 
-        card.add(bottom, BorderLayout.SOUTH);  // ★ 카드 안에 넣음
+        card.add(bottom, BorderLayout.SOUTH);
 
         setVisible(true);
     }
@@ -205,6 +244,48 @@ public class AdvancedSearchDialog extends JDialog {
         l.setFont(new Font("맑은 고딕", Font.BOLD, 13));
         l.setForeground(UIStyle.getTextSecondary());
         return l;
+    }
+
+    private JPanel createSimpleOption(JRadioButton radio, String label) {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 0));
+        panel.setOpaque(false);
+
+        JLabel textLabel = new JLabel(label);
+        textLabel.setForeground(UIStyle.getTextSecondary());
+        textLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
+
+        panel.add(radio);
+        panel.add(textLabel);
+
+        return panel;
+    }
+
+    private JPanel createPriorityOption(JRadioButton radio, String label, Color color) {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 0));
+        panel.setOpaque(false);
+
+        JPanel colorCircle = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(color);
+                g2.fillOval(2, 2, 12, 12);
+            }
+        };
+        colorCircle.setPreferredSize(new Dimension(16, 16));
+        colorCircle.setOpaque(false);
+
+        JLabel textLabel = new JLabel(label);
+        textLabel.setForeground(UIStyle.getTextSecondary());
+        textLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
+
+        panel.add(radio);
+        panel.add(textLabel);
+        panel.add(colorCircle);
+
+        return panel;
     }
 
     private void styleFlatButton(JButton btn) {
@@ -224,7 +305,6 @@ public class AdvancedSearchDialog extends JDialog {
         btn.setOpaque(true);
     }
 
-    // 연 콤보: 현재 년도를 가운데로 ±5년 범위
     private JComboBox<Integer> createYearBox(int currentYear) {
         JComboBox<Integer> box = new JComboBox<>();
         for (int y = currentYear - 5; y <= currentYear + 5; y++) {
@@ -294,32 +374,29 @@ public class AdvancedSearchDialog extends JDialog {
     private void onSearch() {
         FilterOptions f = new FilterOptions();
 
-        // 1) 키워드
         String keyword = keywordField.getText().trim();
         if (!keyword.isEmpty()) {
             f.setKeyword(keyword);
         }
 
-        // 2) 날짜 범위
         LocalDate s = getDateFromCombo(startYearBox, startMonthBox, startDayBox);
         LocalDate e = getDateFromCombo(endYearBox, endMonthBox, endDayBox);
         if (s != null) f.setStartDate(s);
         if (e != null) f.setEndDate(e);
 
-        // 3) 중요도
-        int pIdx = priorityBox.getSelectedIndex();
-        if (pIdx == 1)      f.setPriority(1);   // 상
-        else if (pIdx == 2) f.setPriority(2);   // 중
-        else if (pIdx == 3) f.setPriority(3);   // 하
-        // 0 = 전체 → null
+        if (priorityHigh.isSelected()) {
+            f.setPriority(1);
+        } else if (priorityMedium.isSelected()) {
+            f.setPriority(2);
+        } else if (priorityLow.isSelected()) {
+            f.setPriority(3);
+        }
 
-        // 4) 상태 (완료/미완료)
-        int sIdx = statusBox.getSelectedIndex();
-        if (sIdx == 1) {          // 완료만
+        if (statusCompleted.isSelected()) {
             f.setCompleted(true);
-        } else if (sIdx == 2) {   // 미완료만
+        } else if (statusNotCompleted.isSelected()) {
             f.setCompleted(false);
-        } // 0 = 전체 → null
+        }
 
         controller.applyFilter(f);
         dispose();

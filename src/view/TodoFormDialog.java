@@ -1,4 +1,3 @@
-// view/TodoFormDialog.java
 package view;
 
 import controller.MainController;
@@ -17,13 +16,15 @@ import java.time.LocalDate;
 public class TodoFormDialog extends JDialog {
 
     private final JTextField titleField;
-    // ★ dateField 대신 연/월/일 콤보박스 사용
-    // private final JTextField dateField;
     private final JTextArea descArea;
-    private final JComboBox<String> priorityBox;
-    private final JCheckBox completedBox;
 
-    // ★ 날짜 콤보박스 필드 추가
+    private final JRadioButton priorityHigh;
+    private final JRadioButton priorityMedium;
+    private final JRadioButton priorityLow;
+
+    private final JRadioButton statusCompleted;
+    private final JRadioButton statusNotCompleted;
+
     private final JComboBox<Integer> yearBox;
     private final JComboBox<Integer> monthBox;
     private final JComboBox<Integer> dayBox;
@@ -110,8 +111,6 @@ public class TodoFormDialog extends JDialog {
         UIStyle.styleTextField(titleField);
         form.add(titleField, c);
 
-
-        // 날짜 (연/월/일 콤보박스) ★ 변경 부분
         row++;
         c.gridx = 0; c.gridy = row;
         c.weightx = 0;
@@ -137,7 +136,6 @@ public class TodoFormDialog extends JDialog {
         monthBox = createMonthBox(initialDate.getMonthValue());
         dayBox = createDayBox(initialDate.getYear(), initialDate.getMonthValue(), initialDate.getDayOfMonth());
 
-        // 연/월 변경 시 일 콤보 갱신
         yearBox.addActionListener(e -> updateDayBox());
         monthBox.addActionListener(e -> updateDayBox());
         
@@ -156,7 +154,6 @@ public class TodoFormDialog extends JDialog {
 
         form.add(datePanel, c);
 
-        // 중요도
         row++;
         c.gridx = 0; c.gridy = row;
         c.weightx = 0;
@@ -166,11 +163,30 @@ public class TodoFormDialog extends JDialog {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1.0;
 
-        priorityBox = new JComboBox<>(new String[]{"상", "중", "하"});
-        UIStyle.styleComboBox(priorityBox);
-        form.add(priorityBox, c);
+        JPanel priorityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+        priorityPanel.setOpaque(false);
 
-        // 완료 여부
+        priorityHigh = new JRadioButton();
+        priorityMedium = new JRadioButton();
+        priorityLow = new JRadioButton();
+
+        ButtonGroup priorityGroup = new ButtonGroup();
+        priorityGroup.add(priorityHigh);
+        priorityGroup.add(priorityMedium);
+        priorityGroup.add(priorityLow);
+
+        priorityHigh.setOpaque(false);
+        priorityMedium.setOpaque(false);
+        priorityLow.setOpaque(false);
+
+        priorityMedium.setSelected(true);
+
+        priorityPanel.add(createPriorityOption(priorityHigh, "상", UIStyle.getPriorityHighColor()));
+        priorityPanel.add(createPriorityOption(priorityMedium, "중", UIStyle.getPriorityMediumColor()));
+        priorityPanel.add(createPriorityOption(priorityLow, "하", UIStyle.getPriorityLowColor()));
+
+        form.add(priorityPanel, c);
+
         row++;
         c.gridx = 0; c.gridy = row;
         c.weightx = 0;
@@ -180,11 +196,29 @@ public class TodoFormDialog extends JDialog {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1.0;
 
-        completedBox = new JCheckBox("완료된 일정입니다");
-        completedBox.setOpaque(false);
-        completedBox.setForeground(UIStyle.getTextSecondary());
-        completedBox.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
-        form.add(completedBox, c);
+        JPanel statusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+        statusPanel.setOpaque(false);
+
+        statusNotCompleted = new JRadioButton("진행 중");
+        statusCompleted = new JRadioButton("완료");
+
+        ButtonGroup statusGroup = new ButtonGroup();
+        statusGroup.add(statusNotCompleted);
+        statusGroup.add(statusCompleted);
+
+        statusNotCompleted.setOpaque(false);
+        statusCompleted.setOpaque(false);
+        statusNotCompleted.setForeground(UIStyle.getTextSecondary());
+        statusCompleted.setForeground(UIStyle.getTextSecondary());
+        statusNotCompleted.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
+        statusCompleted.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
+
+        statusNotCompleted.setSelected(true);
+
+        statusPanel.add(statusNotCompleted);
+        statusPanel.add(statusCompleted);
+
+        form.add(statusPanel, c);
 
         row++;
         c.gridx = 0; c.gridy = row;
@@ -249,6 +283,34 @@ public class TodoFormDialog extends JDialog {
         return l;
     }
 
+    private JPanel createPriorityOption(JRadioButton radio, String label, Color color) {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 0));
+        panel.setOpaque(false);
+
+        JPanel colorCircle = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(color);
+                g2.fillOval(2, 2, 12, 12);
+            }
+        };
+        colorCircle.setPreferredSize(new Dimension(16, 16));
+        colorCircle.setOpaque(false);
+
+        JLabel textLabel = new JLabel(label);
+        textLabel.setForeground(UIStyle.getTextSecondary());
+        textLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
+
+        panel.add(radio);
+        panel.add(textLabel);
+        panel.add(colorCircle);
+
+        return panel;
+    }
+
     private void styleFlatButton(JButton btn) {
         btn.setFocusPainted(false);
         btn.setContentAreaFilled(false);
@@ -266,7 +328,6 @@ public class TodoFormDialog extends JDialog {
         btn.setOpaque(true);
     }
 
-    // ★ 삭제 버튼용 스타일
     private void styleDangerButton(JButton btn) {
         btn.setFocusPainted(false);
         btn.setBackground(new Color(210, 70, 80));
@@ -283,7 +344,7 @@ public class TodoFormDialog extends JDialog {
             box.addItem(y);
         }
         box.setSelectedItem(currentYear);
-        UIStyle.styleComboBox(box);  // ★ 여기
+        UIStyle.styleComboBox(box);
         return box;
     }
 
@@ -293,7 +354,7 @@ public class TodoFormDialog extends JDialog {
             box.addItem(m);
         }
         box.setSelectedItem(currentMonth);
-        UIStyle.styleComboBox(box);  // ★ 여기
+        UIStyle.styleComboBox(box);
         return box;
     }
 
@@ -308,7 +369,7 @@ public class TodoFormDialog extends JDialog {
         } else {
             box.setSelectedItem(daysInMonth);
         }
-        UIStyle.styleComboBox(box);  // ★ 여기
+        UIStyle.styleComboBox(box);
         return box;
     }
 
@@ -350,16 +411,20 @@ public class TodoFormDialog extends JDialog {
             dayBox.setSelectedItem(d.getDayOfMonth());
         }
         descArea.setText(t.getDescription());
-        completedBox.setSelected(t.isCompleted());
+
+        if (t.isCompleted()) {
+            statusCompleted.setSelected(true);
+        } else {
+            statusNotCompleted.setSelected(true);
+        }
 
         int p = t.getPriority();
-        int idx = switch (p) {
-            case 1 -> 0;
-            case 2 -> 1;
-            case 3 -> 2;
-            default -> 1;
-        };
-        priorityBox.setSelectedIndex(idx);
+        switch (p) {
+            case 1 -> priorityHigh.setSelected(true);
+            case 2 -> priorityMedium.setSelected(true);
+            case 3 -> priorityLow.setSelected(true);
+            default -> priorityMedium.setSelected(true);
+        }
     }
 
     private void onSave() {
@@ -383,15 +448,16 @@ public class TodoFormDialog extends JDialog {
         todo.setTitle(title);
         todo.setDescription(descArea.getText());
         todo.setDate(date);
-        todo.setCompleted(completedBox.isSelected());
+        todo.setCompleted(statusCompleted.isSelected());
 
-        int idx = priorityBox.getSelectedIndex();
-        int priority = switch (idx) {
-            case 0 -> 1;
-            case 1 -> 2;
-            case 2 -> 3;
-            default -> 2;
-        };
+        int priority = 2;
+        if (priorityHigh.isSelected()) {
+            priority = 1;
+        } else if (priorityMedium.isSelected()) {
+            priority = 2;
+        } else if (priorityLow.isSelected()) {
+            priority = 3;
+        }
         todo.setPriority(priority);
 
         controller.saveTodo(todo);

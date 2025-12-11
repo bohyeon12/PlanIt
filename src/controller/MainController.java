@@ -58,7 +58,11 @@ public class MainController {
 	public boolean hasTodoOn(LocalDate date) {
 	    return todoDAO.existsByDate(date);
 	}
-	
+
+	public Integer getHighestPriorityForDate(LocalDate date) {
+	    return todoDAO.getHighestPriorityForDate(date);
+	}
+
 	public void saveTodo(Todo todo) {
 	    if (todo.getId() == 0) {
 	        todoDAO.insert(todo);

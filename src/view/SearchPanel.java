@@ -14,7 +14,7 @@ public class SearchPanel extends JPanel {
     private JTextField searchField;
     private JButton filterButton;
     private JButton themeButton;
-    private JButton advancedButton;   // ⭐ 고급검색 버튼
+    private JButton advancedButton;   
 
     private JLabel appTitleLabel;
     private JLabel searchLabel;
@@ -129,7 +129,7 @@ public class SearchPanel extends JPanel {
         UIStyle.toggleDarkMode();
         applyTheme();
 
-        controller.onThemeChanged();  // 이미 구현되어 있다고 했던 메서드
+        controller.onThemeChanged();
 
         Window w = SwingUtilities.getWindowAncestor(this);
         if (w != null) {

@@ -7,9 +7,9 @@ public class FilterOptions {
     private String keyword;         // 제목 검색어
     private LocalDate startDate;    // 시작 날짜 (옵션)
     private LocalDate endDate;      // 끝 날짜 (옵션)
-    private Boolean completed;      // null: 전체, true: 완료만, false: 미완료만
+    private Boolean completed;    
 
-    private Integer priority;       // null: 전체, 1: 상, 2: 중, 3: 하
+    private Integer priority;      
 
     public String getKeyword() {
         return keyword;

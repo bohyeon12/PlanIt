@@ -168,13 +168,18 @@ public class TodoListViewPanel extends JPanel {
         }
         sb.append(todo.getTitle());
 
-        final JLabel textLabel = new JLabel(sb.toString());
+        final String baseText = sb.toString();
+        final JLabel textLabel = new JLabel();
         textLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
         textLabel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UIStyle.getCardBorder()));
-        textLabel.setForeground(todo.isCompleted()
-                ? UIStyle.getTextSecondary()
-                : UIStyle.getTextPrimary()
-        );
+
+        if (todo.isCompleted()) {
+            textLabel.setText("<html><strike>" + baseText + "</strike></html>");
+            textLabel.setForeground(UIStyle.getTextSecondary());
+        } else {
+            textLabel.setText(baseText);
+            textLabel.setForeground(UIStyle.getTextPrimary());
+        }
 
         // 동그라미 클릭 → 완료 토글
         circle.addMouseListener(new MouseAdapter() {
@@ -184,7 +189,13 @@ public class TodoListViewPanel extends JPanel {
                 todo.setCompleted(newVal);
                 controller.updateTodoCompleted(todo, newVal);
                 circle.repaint();
-                textLabel.setForeground(newVal ? UIStyle.getTextSecondary() : UIStyle.getTextPrimary());
+                if (newVal) {
+                    textLabel.setText("<html><strike>" + baseText + "</strike></html>");
+                    textLabel.setForeground(UIStyle.getTextSecondary());
+                } else {
+                    textLabel.setText(baseText);
+                    textLabel.setForeground(UIStyle.getTextPrimary());
+                }
             }
         });
 
@@ -200,8 +211,33 @@ public class TodoListViewPanel extends JPanel {
         itemPanel.addMouseListener(editListener);
         textLabel.addMouseListener(editListener);
 
+        JPanel priorityCircle = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                Color priorityColor;
+                int priority = todo.getPriority();
+                if (priority == 1) {
+                    priorityColor = UIStyle.getPriorityHighColor();
+                } else if (priority == 2) {
+                    priorityColor = UIStyle.getPriorityMediumColor();
+                } else {
+                    priorityColor = UIStyle.getPriorityLowColor();
+                }
+
+                g2.setColor(priorityColor);
+                g2.fillOval(4, 12, 16, 16);
+            }
+        };
+        priorityCircle.setPreferredSize(new Dimension(24, 40));
+        priorityCircle.setBackground(UIStyle.getCardBackground());
+
         itemPanel.add(circle, BorderLayout.WEST);
         itemPanel.add(textLabel, BorderLayout.CENTER);
+        itemPanel.add(priorityCircle, BorderLayout.EAST);
 
         return itemPanel;
     }

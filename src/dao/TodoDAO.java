@@ -176,7 +176,26 @@ public class TodoDAO {
             throw new RuntimeException("existsByDate 실패", e);
         }
     }
-    
-    
+
+    public Integer getHighestPriorityForDate(LocalDate date) {
+        String sql = "SELECT MIN(priority) FROM todos WHERE date = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setDate(1, Date.valueOf(date));
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int priority = rs.getInt(1);
+                    if (rs.wasNull()) {
+                        return null;
+                    }
+                    return priority;
+                }
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("getHighestPriorityForDate failed", e);
+        }
+    }
+
+
 
 }
