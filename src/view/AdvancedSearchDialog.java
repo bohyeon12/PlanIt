@@ -38,7 +38,6 @@ public class AdvancedSearchDialog extends JDialog {
         setLayout(new BorderLayout());
         getContentPane().setBackground(UIStyle.getBackground());
 
-        // ===== 카드 패널 =====
         JPanel card = new JPanel(new BorderLayout(10, 10)) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -68,7 +67,6 @@ public class AdvancedSearchDialog extends JDialog {
         card.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         add(card, BorderLayout.CENTER);
 
-        // ===== 폼 영역 =====
         JPanel form = new JPanel(new GridBagLayout());
         form.setOpaque(false);
         card.add(form, BorderLayout.CENTER);
@@ -80,24 +78,12 @@ public class AdvancedSearchDialog extends JDialog {
         c.weightx = 1.0;
 
         int row = 0;
-
-        // 1) 키워드
+        
         c.gridx = 0; c.gridy = row;
         form.add(makeLabel("제목 키워드"), c);
-
-        keywordField = new JTextField();
-        keywordField.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
         c.gridx = 1; c.gridy = row;
-        keywordField.setForeground(UIStyle.getTextPrimary());
-        keywordField.setBackground(
-                UIStyle.isDarkMode()
-                        ? new Color(40, 44, 52)
-                        : Color.WHITE
-        );
-        keywordField.setCaretColor(UIStyle.getTextPrimary());
-        keywordField.setBorder(BorderFactory.createLineBorder(
-                UIStyle.isDarkMode() ? new Color(90, 90, 110) : new Color(200, 200, 200)
-        ));
+        keywordField = new JTextField();
+        UIStyle.styleTextField(keywordField);
         form.add(keywordField, c);
 
         // 오늘 날짜 기준

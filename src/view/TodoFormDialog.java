@@ -84,7 +84,6 @@ public class TodoFormDialog extends JDialog {
 
         add(card, gbc);
 
-        // 제목 라벨
         JLabel titleLabel = new JLabel(todo == null ? "새 일정" : "일정 수정");
         titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 18));
         titleLabel.setForeground(UIStyle.getTextPrimary());
@@ -101,7 +100,6 @@ public class TodoFormDialog extends JDialog {
 
         int row = 0;
 
-        // 제목
         c.gridx = 0; c.gridy = row;
         form.add(makeLabel("제목"), c);
         c.gridx = 1; c.gridy = row;

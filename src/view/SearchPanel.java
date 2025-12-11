@@ -28,29 +28,26 @@ public class SearchPanel extends JPanel {
         setLayout(new BorderLayout(10, 0));
         setOpaque(false);
 
-        // ----- 왼쪽: PlanIt + 검색창 -----
         JPanel left = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         left.setOpaque(false);
 
         appTitleLabel = new JLabel("PlanIt");
         appTitleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
 
-        searchLabel = new JLabel("검색:");
-        searchLabel.setFont(new Font("맑은 고딕", Font.BOLD, 14));
-
-        searchField = new JTextField(18);
-        searchField.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
-        searchField.addActionListener(e -> applyFilter());
-
         left.add(appTitleLabel);
         left.add(Box.createHorizontalStrut(20));
-        left.add(searchLabel);
-        left.add(searchField);
 
         add(left, BorderLayout.WEST);
 
         JPanel right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 10));
         right.setOpaque(false);
+        
+        searchLabel = new JLabel("검색:");
+        searchLabel.setFont(new Font("맑은 고딕", Font.BOLD, 14));
+        
+        searchField = new JTextField(18);
+        UIStyle.styleTextField(searchField);
+        searchField.addActionListener(e -> applyFilter());
 
         filterButton = new JButton("전체");
         advancedButton = new JButton("고급검색");
@@ -64,6 +61,8 @@ public class SearchPanel extends JPanel {
         themeButton.addActionListener(e -> toggleTheme());
         advancedButton.addActionListener(e -> openAdvancedSearch());
 
+        right.add(searchLabel);
+        right.add(searchField);
         right.add(filterButton);
         right.add(advancedButton);
         right.add(themeButton);
@@ -85,18 +84,10 @@ public class SearchPanel extends JPanel {
         Color secondary = UIStyle.getTextSecondary();
 
         appTitleLabel.setForeground(primary);
-        searchLabel.setForeground(primary);
+        searchLabel.setForeground(secondary);
 
         searchField.setForeground(primary);
-        searchField.setBackground(
-                UIStyle.isDarkMode()
-                        ? new Color(40, 44, 52)
-                        : Color.WHITE
-        );
-        searchField.setCaretColor(primary);
-        searchField.setBorder(BorderFactory.createLineBorder(
-                UIStyle.isDarkMode() ? new Color(90, 90, 110) : new Color(200, 200, 200)
-        ));
+        UIStyle.styleTextField(searchField);
 
         filterButton.setForeground(secondary);
         advancedButton.setForeground(secondary);

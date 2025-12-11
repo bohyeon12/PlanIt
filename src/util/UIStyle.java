@@ -80,9 +80,7 @@ public class UIStyle {
     public static void styleTextField(JTextField field) {
         field.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
         field.setForeground(getTextPrimary());
-        field.setBackground(UIStyle.isDarkMode()
-                ? new Color(70, 74, 84)  
-                : new Color(220, 220, 230) );
+        field.setBackground(UIStyle.getFieldBackground());
         field.setCaretColor(getTextPrimary());
         field.setBorder(new LineBorder(getFieldBorderColor()));
     }
@@ -91,9 +89,7 @@ public class UIStyle {
         Color primary = getTextPrimary();
 
         box.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
-        box.setBackground(UIStyle.isDarkMode()
-                ? new Color(70, 74, 84)  
-                : new Color(220, 220, 230) );
+        box.setBackground(UIStyle.getFieldBackground());
         box.setOpaque(true);   
         box.setBorder(new LineBorder(getFieldBorderColor()));
 
